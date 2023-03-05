@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}View{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+<div class="d-flex flex-column">
+    {% for post in new %}
+    <div class="card post-div mb-3">
+        <!-- <small class="category" style="text-transform: capitalize;"><strong>Category:</strong> <a href="{% url 'category' post.category|slugify %}">  {{ post.category }}</a></small> -->
+        <img src="{{ post.pic.url }}" class="card-img-top img-fluid fluid" alt="Post">
+        <div class="card-body index-body">
+            <div class="card-title d-flex justify-content-between">
+                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                    <!-- <form action="{% url 'like' post.pk %}" method="POST">
+                        {% csrf_token %}
+
+                    {% if liked %}
+                        <button type="submit" title="Like" name="post_id" value="{{ post.id }}" class="btn btn-outline-none">
+                            <i class="fa fa-heart" aria-hidden="true"></i>
+                        </button>
+                    {% else %}
+                        <button type="submit" title="Like" name="post_id" value="{{ post.id }}" class="btn btn-outline-none">
+                            <i class="fa fa-heart-o" aria-hidden="true"></i>
+                        </button>
+                    {% endif %}
+                    </form>     -->
+                    <a href="{% url 'detail' post.pk %}">
+                        <button type="button" title="Comment" class="btn btn-outline-none">
+                            <i class="fa fa-comment-o" aria-hidden="true"></i>
+                        </button>
+                    </a>
+                    <!-- <a>
+                        <button type="button" title="Share" class="btn btn-outline-none">
+                            <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                        </button>
+                    </a> -->
+                </div>
+                <a href="{% url 'add-favourite' post.id %}" title="Add To Favourites" class="btn btn-outline-none"><i class="fa fa-bookmark-o" aria-hidden="true"></i></a>
+            </div>
+            <div class="caption"><small class="fw-semibold"><a href="{% url 'user-profile' post.author.profile.id %}">@{{ post.author }}</a> -</small> <a href="{% url 'detail' post.pk %}">{{ post.caption|safe|linebreaksbr|truncatechars:110 }}</a></div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<p class="fw-bold">Sorry Mate, Login First</p><i class="fa fa-smile-o" aria-hidden="true"></i>...
+<!-- <i class="fal fa-grin-tongue-squint"></i>... -->
+{% endif %}
+{% endblock %}

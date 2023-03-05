@@ -1,0 +1,29 @@
+{% load static %}
+<head>
+    <script src="https://kit.fontawesome.com/f342c09598.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'add-comment.css' %}">
+</head>
+
+<body class="bg-transparent">
+    {% if user.is_authenticated %}
+        <!-- <div class="rounded shadow p-5 mb-3 bg-body"> -->
+            <!-- <h1>Add Your Comment To @{{post.author}}'s Post...</h1> -->
+            <form action="" class="bg-transparent" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <!-- <br> -->
+                <button type="submit" class="btn btn-primary mb-2">Post Comment</button>
+            </form>
+        <!-- </div> -->
+    {% else %}
+    <p class="fw-bold">Sorry Mate, Login First</p><i class="fa fa-smile-o" aria-hidden="true"></i>...
+    <!-- <i class="fal fa-grin-tongue-squint"></i>... -->
+    {% endif %}
+    
+    <script>
+        var username = "{{ user.username }}";
+        document.getElementById("commentauthor").value = username;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>   
+</body>

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit @{{post.author}} - {{post.caption|slice:":30"}}...{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+    {% if user.id == post.author.id %}
+        <div class="rounded shadow p-5 mb-3 bg-body">
+            <h3>Edit @{{post.author}}'s' Post.</h3>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <br>
+                <button type="submit" class="btn btn-primary mb-2">Edit</button>
+            </form>
+        </div>
+    {% else %}
+        <p class="fw-bold">You're not allowed here. Don't be mischievous</p><i class="fa fa-smile-o" aria-hidden="true"></i>...
+        <!-- <i class="fal fa-grin-tongue-squint"></i>... -->
+    {% endif %}
+    
+{% else %}
+    <p class="fw-bold">Sorry Mate, Login First</p><i class="fa fa-smile-o" aria-hidden="true"></i>...
+    <!-- <i class="fal fa-grin-tongue-squint"></i>... -->
+{% endif %}
+
+{% endblock %}

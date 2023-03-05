@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}@{{post.author}} - {{post.caption|slice:":30"}}...{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+    <div class="card shadow rounded bg-body mb-3">
+        <div class="row g-5">
+          <div class="col-md-4 d-flex flex-column align-item-center">
+            <img src="{{ post.pic.url }}" class="rounded-start media-detail" alt="Post Media">
+            <div class="d-flex user-caption" style="width: 400px;">
+                {% if post.author.profile.profile_pic %}
+                <div class="profile-pic"><a href="{% url 'user-profile' post.author.profile.id %}">
+                    <img src="{{ post.author.profile.profile_pic.url }}" class="rounded-circle" alt="">
+                </a>
+                </div>
+                {% else %}
+                <div class="profile-pic"><a href="{% url 'user-profile' post.author.profile.id %}">
+                    <img src="{% static 'Img/user-profile-thumbnail.png' %}" class="rounded-circle" alt="">
+                    <!-- <img src="{% static 'Img/user-profile-thumbnail-removebg-preview.png' %}" class="rounded-circle" alt=""> -->
+                </a>
+                </div>
+                {% endif %}
+                <div class="d-flex align-content-between">
+                    <div class="overflow-y-auto detail-caption" style="width: 350px;">
+                        <a href="{% url 'user-profile' post.author.profile.id %}" class="fw-bold">{{ post.author.username }}</a> - <span class="fw-semibold">{{ post.caption|safe|linebreaksbr }}</span> <small>{{ post.date_published }}</small>
+                        <hr>
+                    </div>                        
+                </div>
+            </div>
+          </div>
+          <div class="col-md-8">
+                <!-- <div class="card-body">
+                    
+                </div> -->
+                <div class="card-body d-flex comment" style="width: 100%;">
+                    {% if not post.comments.all %}
+                        <div class="d-flex user-caption">
+                            <p>
+                                No Comments... 
+                                <!-- <a href="{% url 'add-comment' post.pk %}">Add Comment</a><br> -->
+                            </p>
+                        </div>
+                    {% else %}
+                    {% for comment in post.comments.all %}
+                        <div class="d-flex align-content-between">
+                            <div class="overflow-y-auto detail-caption">
+                                <a href="" class="fw-bold">{{ comment.username }}</a> - <span class="fw-semibold">{{ comment.body|safe|linebreaksbr }}</span> <small>{{ comment.date_added }}</small>
+                                <hr>
+                            </div>
+                            <!-- <br><br> -->
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                    <a data-bs-toggle="modal" data-bs-target="#exampleModal">Add Comment</a>
+                    <!-- <a href="{% url 'add-comment' post.pk %}">Add Comment</a> -->
+                
+                <div class="detail-nav d-flex" role="group" aria-label="Basic outlined example">
+                    <a href="{% url 'home' %}" title="Back" class="btn btn-outline-none chevron-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+                    <!-- Like/Unlike Form -->
+                    <form action="{% url 'like' post.pk %}" method="POST">
+                        {% csrf_token %}
+
+                    {% if liked %}
+                        <button type="submit" title="Like" name="post_id" value="{{ post.id }}" class="btn btn-outline-none">
+                            <i class="fa fa-heart" aria-hidden="true"></i>  <small>{{ total_likes }} likes</small>
+                        </button>
+                    {% else %}
+                        <button type="submit" title="Like" name="post_id" value="{{ post.id }}" class="btn btn-outline-none">
+                            <i class="fa fa-heart-o" aria-hidden="true"></i>  <small>{{ total_likes }} likes</small>
+                        </button>
+                    {% endif %}
+                    </form>
+                    <a href="">
+                        <button type="button" title="Share" class="btn btn-outline-none">
+                            <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                        </button>
+                    </a>
+                    {% if user.id == post.author.id %}
+                    <a class="btn btn-outline-none edit" href="{% url 'edit' post.pk %}" title="Edit Post"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                    <a class="btn btn-outline-none edit" href="{% url 'delete' post.pk %}" title="Delete Post"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content bg-body">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <iframe src="{% url 'add-comment' post.pk %}" class="overflow-y-hidden overflow-x-hidden" frameborder="0"></iframe>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% else %}
+<p class="fw-bold">Sorry Mate, Login First</p><i class="fa fa-smile-o" aria-hidden="true"></i>...
+<!-- <i class="fal fa-grin-tongue-squint"></i>... -->
+{% endif %}
+
+{% endblock %}
