@@ -20,7 +20,7 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Update database configuration from $DATABASE_URL.
-DATABASE_URL = "postgres://postgres.pnoybkssgznmytcbkzkb:instadbPassw@aws-0-eu-west-2.pooler.supabase.com:5432/postgres"
+# DATABASE_URL = "postgres://postgres.pnoybkssgznmytcbkzkb:instadbPassw@aws-0-eu-west-2.pooler.supabase.com:5432/postgres"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -31,14 +31,14 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = config("DEBUG", default=False, cast=bool)
-# DEBUG = True
-DEBUG = 'RENDER' not in os.environ
+# DEBUG = False
+DEBUG = os.environ.get("DEBUG")
 
-ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ["*"]
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+# RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+# if RENDER_EXTERNAL_HOSTNAME:
+#     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Login Url added if not @login_required will be giving error
 LOGIN_URL = "/login"
@@ -95,19 +95,37 @@ WSGI_APPLICATION = "Facecard.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1000),
-    # "default": {
-    #     "ENGINE": "django.db.backends.sqlite3",
-    #     "NAME": BASE_DIR / "db.sqlite3",
-    #     # "ENGINE": config("DB_ENGINE"),
-    #     # "HOST": config("DB_HOST"),
-    #     # "NAME": config("DB_NAME"),
-    #     # "USER": config("DB_USER"),
-    #     # "PASSWORD": config("DB_PASSWORD"),
-    #     # "PORT": config("DB_PORT"),
-    # }
-}
+if not DEBUG:
+    DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'db.sqlite3',
+        }
+    }
+
+# DATABASES = {
+#     # "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1000),
+#     "default": {
+#         # "ENGINE": "django.db.backends.sqlite3",
+#         # "NAME": BASE_DIR / "db.sqlite3",
+        
+#         "ENGINE": "django.db.backends.postgresql",
+#         "HOST": "aws-0-eu-west-2.pooler.supabase.com",
+#         "NAME": "postgres",
+#         "USER": "postgres.pnoybkssgznmytcbkzkb",
+#         "PASSWORD": "instadbPassw",
+#         "PORT": 5432,
+        
+#         # "ENGINE": config("DB_ENGINE"),
+#         # "HOST": config("DB_HOST"),
+#         # "NAME": config("DB_NAME"),
+#         # "USER": config("DB_USER"),
+#         # "PASSWORD": config("DB_PASSWORD"),
+#         # "PORT": config("DB_PORT"),
+#     }
+# }
 
 
 # Password validation
