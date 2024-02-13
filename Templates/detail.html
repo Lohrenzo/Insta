@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load social_share %}
+
+{% block title %}@{{post.author}} - {{post.caption|slice:":30"}}...{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+    <div class="shadow rounded detail post-div mb-3">
+        <div class="position-relative" style="width: 400px;">
+            <img src="{{ post.pic.url }}" class="rounded-start media-detail" alt="Post Media">
+            <div class="post-caption">
+                {% if post.author.profile.profile_pic %}
+                <a class="profile-pic" href="{% url 'user-profile' post.author.profile.id %}">
+                    <img src="{{ post.author.profile.profile_pic.url }}" class="rounded-circle" alt="">
+                </a>
+                {% else %}
+                <a class="profile-pic" href="{% url 'user-profile' post.author.profile.id %}">
+                    <img src="{% static 'Img/user-profile-thumbnail.png' %}" class="rounded-circle" alt="">
+                    <!-- <img src="{% static 'Img/user-profile-thumbnail-removebg-preview.png' %}" class="rounded-circle" alt=""> -->
+                </a>
+                {% endif %}
+                <span style="width: 300px; font-size: 14px; padding: 0.4rem 0 0.2rem 0.4rem;">
+                        <a href="{% url 'user-profile' post.author.profile.id %}" class="fw-bold">{{ post.author.username }}</a> - <a style="word-wrap: break-word;" class="fw-semibold" data-bs-toggle="modal" data-bs-target="#exampleModal">{{ post.caption|safe|linebreaksbr|truncatechars:50 }}</a> 
+                        <!-- <small style="font-size: 9px;">{{ post.date_published }}</small> -->
+                </span>
+            </div>
+            <a title="Back" class="btn btn-outline-none chevron-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+
+        </div>
+        <div class="comment-container">
+            <div class="comment" style="padding: 0.4rem 0.8rem 0 0;">
+            {% if not post.comments.all %}
+                    <p>
+                        <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="padding: 5px;">Add Your Comment</a>
+                        <!-- <a href="{% url 'add-comment' post.pk %}">Add Comment</a><br> -->
+                    </p>
+                {% else %}
+                {% for comment in post.comments.all %}
+                    <div class="d-flex align-content-between">
+                        <div class="overflow-y-auto detail-caption">
+                            <span class="fw-bold">{{ comment.username }}</span> - <span class="fw-semibold">{{ comment.body|safe|linebreaksbr }}</span> <small>{{ comment.date_added }}</small>
+                            <hr>
+                        </div>
+                        <!-- <br><br> -->
+                    </div>
+                {% endfor %}
+            </div>
+            <br>
+            <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="padding: 5px;">Add Your Comment</a>
+            {% endif %}
+            <div class="detail-nav d-flex" role="group" aria-label="Basic outlined example">
+                <!-- Like/Unlike Form -->
+                <form action="{% url 'like' post.pk %}" method="POST">
+                    {% csrf_token %}
+    
+                {% if liked %}
+                    <button type="submit" title="Like" name="post_id" value="{{ post.id }}" class="btn btn-outline-none">
+                        <i class="fa fa-heart" aria-hidden="true"></i>  <small>{{ total_likes }} likes</small>
+                    </button>
+                {% else %}
+                    <button type="submit" title="Like" name="post_id" value="{{ post.id }}" class="btn btn-outline-none">
+                        <i class="fa fa-heart-o" aria-hidden="true"></i>  <small>{{ total_likes }} likes</small>
+                    </button>
+                {% endif %}
+                </form>
+                <a data-bs-toggle="modal" data-bs-target="#socialShare">
+                    <button type="button" title="Share" class="btn btn-outline-none">
+                        <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                    </button>
+                </a>
+                <a href="{% url 'add-favourite' post.id %}" title="Add To Favourites" class="btn btn-outline-none"><i class="fa fa-bookmark-o" aria-hidden="true"></i></a>
+
+                {% if user.id == post.author.id %}
+                <a class="btn btn-outline-none edit" href="{% url 'edit' post.pk %}" title="Edit Post"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                <a class="btn btn-outline-none edit" href="{% url 'delete' post.pk %}" title="Delete Post"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Social Share Modal -->
+    <div class="modal fade" id="socialShare" data-bs-keyboard="false" tabindex="-1" aria-labelledby="socialShareLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-body p-4">
+                <!-- <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div> -->
+                <div class="modal-body">
+                    {% post_to_facebook object_or_url "Post to Facebook!" %}
+                    {% post_to_twitter "@{{post.author}}'s: Check it out!" object_or_url "Post to Twitter" %}
+                    {% post_to_gplus object_or_url "Post to Google+!" %}
+                    {% post_to_linkedin object_or_url %}
+                    {% send_email object.title "New Post: {{post.author}}. Check it out!" object_or_url "Share via email" %}
+                    <!-- {% comment %}{% post_to_reddit "New Post: {{post.author}}" <object_or_url> %}
+                    {% post_to_telegram "New Post: {{object.title}}" <object_or_url> %}{% endcomment %} -->
+                    {% post_to_whatsapp object_or_url "Share via WhatsApp" %}
+                    {% save_to_pinterest object_or_url %}
+                    {% copy_to_clipboard object_or_url "Copy to clipboard!" %}
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" id="refresh" class="btn btn-secondary">See Comments</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+
+    <!--Post Full Caption Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-body p-4">
+                <!-- <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div> -->
+                <div class="modal-body">
+                    <a href="{% url 'user-profile' post.author.profile.id %}" class="fw-bold">{{ post.author.username }}</a> - <span style="word-wrap: break-word;" class="fw-semibold">{{ post.caption|safe|linebreaksbr }}</span> 
+                    <hr>
+                    <p style="font-size: 9px;">{{ post.date_published }}</p>
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Comment Modal -->
+    <!-- <div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"> -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-body">
+                <!-- <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div> -->
+                <div class="modal-body">
+                    <iframe src="{% url 'add-comment' post.pk %}" class="overflow-y-hidden overflow-x-hidden" frameborder="0"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="refresh" class="btn btn-secondary">See Comments</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <p class="fw-bold">Sorry Mate, Login First</p><i class="fa fa-smile-o" aria-hidden="true"></i>...
+    <!-- <i class="fal fa-grin-tongue-squint"></i>... -->
+{% endif %}
+
+<script>
+    var refresh = document.getElementById('refresh');
+    var goBack = document.querySelector(".chevron-left");
+
+    function reFresh() {
+        window.location.reload(true)
+    };
+    refresh.addEventListener("click", reFresh);
+
+    function previousPage() {
+        window.history.back();
+    }
+    goBack.addEventListener("click", previousPage);
+</script>
+
+{% add_pinterest_script %} 
+{% add_copy_script %} 
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}@{{user.username}}'s Profile Edit{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+    {% if user.id == profile.user.id %}
+    <div class="rounded shadow p-5 mb-3 bg-body">
+        <h1>Update your profile, but don't lie o!</h1>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <br>
+            <button type="submit" class="btn btn-primary mb-2">Update Profile</button>
+        </form>
+    </div>
+    {% else %}
+    <p class="fw-bold">You can't edit this profile !!!</p>
+    {% endif %}
+{% else %}
+    <p class="fw-bold">Sorry Mate, Login First</p><i class="fa fa-smile-o" aria-hidden="true"></i>...
+    <!-- <i class="fal fa-grin-tongue-squint"></i> -->
+{% endif %}
+
+{% endblock %}

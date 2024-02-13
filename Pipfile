@@ -1,0 +1,33 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==4.1.4"
+asgiref = "==3.5.2"
+certifi = "==2022.9.24"
+distlib = "==0.3.6"
+django-ckeditor = "==6.5.1"
+django-js-asset = "==2.0.0"
+django-social-share = "==2.3.0"
+django-tinymce = "==3.5.0"
+djangorestframework = "==3.14.0"
+filelock = "==3.8.0"
+gunicorn = "==20.1.0"
+mysql-connector-python = "==8.0.31"
+pillow = "==9.4.0"
+pipenv = "==2022.11.11"
+platformdirs = "==2.5.4"
+python-decouple = "==3.8"
+pytz = "==2022.7.1"
+sqlparse = "==0.4.3"
+tzdata = "==2022.7"
+virtualenv = "==20.16.7"
+virtualenv-clone = "==0.5.7"
+whitenoise = "==6.4.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}@{{post.author}} - {{post.caption|slice:":30"}}...{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="shadow rounded bg-body p-4 mb-3">
+        <h1>Search Result for: "{{ searched }}"</h1>
+        <br>
+        {% if searched %}
+        <div class="d-flex flex-column">
+        {% for post in posts %}
+            <a class="text-center" href="{% url 'detail' post.pk%}">
+                @{{ post.author }} - {{ post.caption|slice:":30" }}...
+            </a>
+            <hr>
+        {% endfor %}
+        </div>
+        {% else %}
+        <h1>Hey Mate, Search for a Post</h1>
+        {% endif %}
+
+    </div>
+
+{% else %}
+    <p class="fw-bold">Sorry Mate, Login First!!</p><i class="fa fa-smile-o" aria-hidden="true"></i>...
+    <!-- <i class="fal fa-grin-tongue-squint"></i>... -->
+{% endif %}
+{% endblock %}

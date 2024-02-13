@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}@{{post.author}} - {{post.caption|slice:":30"}}...{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="rounded shadow p-5 mb-3 bg-body">
+        <h1>Add Your Comment To @{{post.author}}'s Post...</h1>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <br>
+            <button type="submit" class="btn btn-primary mb-2">Add Comment</button>
+        </form>
+    </div>
+{% else %}
+<p class="fw-bold">Sorry Mate, Login First</p><i class="fa fa-smile-o" aria-hidden="true"></i>...
+<!-- <i class="fal fa-grin-tongue-squint"></i>... -->
+{% endif %}
+
+<script>
+    var username = "{{ user.username }}";
+    document.getElementById("commentauthor").value = username;
+</script>
+
+{% endblock %}

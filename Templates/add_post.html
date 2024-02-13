@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Upload a new Post Card{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="rounded shadow p-5 mb-3 bg-body">
+    <h1>Add Your Post...</h1>
+    <center>
+        <div class="vid-i fs-1 p-5">
+            <i class="fa fa-picture-o" aria-hidden="true"></i>
+            <i class="fa fa-play-circle-o" aria-hidden="true"></i>
+        </div>  
+    </center>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br>
+        <button type="submit" class="btn btn-primary mb-2">Upload</button>
+    </form>
+</div>
+{% else %}
+<p class="fw-bold">Sorry Mate, Login First</p><i class="fa fa-smile-o" aria-hidden="true"></i>...
+<!-- <i class="fal fa-grin-tongue-squint"></i> -->
+{% endif %}
+
+<script>
+    var username = "{{ user.id }}";
+    document.getElementById("postauthor").value = username;
+</script>
+{% endblock %}
