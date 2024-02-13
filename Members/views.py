@@ -1,6 +1,9 @@
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
+from django.urls import reverse
 from django.views import generic
 from django.views.generic import DetailView, CreateView
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
@@ -59,6 +62,21 @@ class PasswordsChangeView(PasswordChangeView):
 
 def password_success(request):
     return render(request, 'password-success.html', {})
+
+def user_login(request):
+    if request.method=='POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username = username, password =password)
+        if user is not None:
+            login(request, user)
+            # return redirect('home')
+            return redirect(request.GET.get('next', reverse('home')))
+        else:
+            messages.info(request,'Invalid Login Credentials')
+            return redirect('login')
+    else:
+        return render(request,'login.html')
 
 class UserRegisterView(generic.CreateView):
     form_class = SignUpForm
