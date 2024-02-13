@@ -95,37 +95,30 @@ WSGI_APPLICATION = "Facecard.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-if not DEBUG:
-    DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))}
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'db.sqlite3',
-        }
-    }
-
-# DATABASES = {
-#     # "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1000),
-#     "default": {
-#         # "ENGINE": "django.db.backends.sqlite3",
-#         # "NAME": BASE_DIR / "db.sqlite3",
-        
-#         "ENGINE": "django.db.backends.postgresql",
-#         "HOST": "aws-0-eu-west-2.pooler.supabase.com",
-#         "NAME": "postgres",
-#         "USER": "postgres.pnoybkssgznmytcbkzkb",
-#         "PASSWORD": "instadbPassw",
-#         "PORT": 5432,
-        
-#         # "ENGINE": config("DB_ENGINE"),
-#         # "HOST": config("DB_HOST"),
-#         # "NAME": config("DB_NAME"),
-#         # "USER": config("DB_USER"),
-#         # "PASSWORD": config("DB_PASSWORD"),
-#         # "PORT": config("DB_PORT"),
+# if not DEBUG:
+#     DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))}
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': 'db.sqlite3',
+#         }
 #     }
-# }
+
+DATABASES = {
+    # "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1000),
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+
+        # "ENGINE": config("DB_ENGINE"),
+        # "HOST": config("DB_HOST"),
+        # "NAME": config("DB_NAME"),
+        # "USER": config("DB_USER"),
+        # "PASSWORD": config("DB_PASSWORD"),
+        # "PORT": config("DB_PORT"),
+    }
+}
 
 
 # Password validation
