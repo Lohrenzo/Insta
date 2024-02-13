@@ -1,34 +1,47 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}View{% endblock %}
-
+{% extends 'base.html' %} {% load static %} {% block title %}View{% endblock %}
 {% block content %}
+<!-- {% comment %}
 {% if user.is_authenticated %}
-    <div class="d-flex flex-column">
-        {% for post in object_list %}
-        <div class="card post-div mb-3">
-            <a href="{% url 'detail' post.pk %}">
-                <!-- <small class="category" style="text-transform: capitalize;"><strong>Category:</strong> <a href="{% url 'category' post.category|slugify %}">  {{ post.category }}</a></small> -->
-                <img src="{{ post.pic.url }}" class="card-img-top img-fluid fluid" alt="Post">
-            </a>
-            <div class="card-body index-body">
-                <div class="card-title d-flex align-items-center justify-content-between">
-                    <div class="caption"><small class="fw-semibold"><a href="{% url 'user-profile' post.author.profile.id %}">@{{ post.author }}</a> -</small> <a href="{% url 'detail' post.pk %}">{{ post.caption|safe|linebreaksbr|truncatechars:110 }}</a></div>
-                    <!-- <a href="{% url 'detail' post.pk %}">
+{% endcomment %} -->
+<div class="d-flex flex-column">
+  {% for post in object_list %}
+  <div class="card post-div mb-3">
+    <a href="{% url 'detail' post.pk %}">
+      <!-- <small class="category" style="text-transform: capitalize;"><strong>Category:</strong> <a href="{% url 'category' post.category|slugify %}">  {{ post.category }}</a></small> -->
+      <img
+        src="{{ post.pic.url }}"
+        class="card-img-top img-fluid fluid"
+        alt="Post"
+      />
+    </a>
+    <div class="card-body index-body">
+      <div class="card-title d-flex align-items-center justify-content-between">
+        <div class="caption">
+          <small class="fw-semibold"
+            ><a href="{% url 'user-profile' post.author.profile.id %}"
+              >@{{ post.author }}</a
+            >
+            -</small
+          >
+          <a href="{% url 'detail' post.pk %}"
+            >{{ post.caption|safe|linebreaksbr|truncatechars:110 }}</a
+          >
+        </div>
+        <!-- <a href="{% url 'detail' post.pk %}">
                         <button type="button" title="Comment" class="btn btn-outline-none">
                             <i class="fa fa-comment-o" aria-hidden="true"></i>
                         </button>
                     </a> -->
-                    <!-- {% comment %} <a href="{% url 'add-favourite' post.id %}" title="Add To Favourites" class="btn btn-outline-none"><i class="fa fa-bookmark-o" aria-hidden="true"></i></a> {% endcomment %}-->
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+        <!-- {% comment %} <a href="{% url 'add-favourite' post.id %}" title="Add To Favourites" class="btn btn-outline-none"><i class="fa fa-bookmark-o" aria-hidden="true"></i></a> {% endcomment %}-->
+      </div>
     </div>
+  </div>
+  {% endfor %}
+</div>
 
+<!-- {% comment %}
 {% else %}
 <p class="fw-bold">Sorry Mate, Login First</p><i class="fa fa-smile-o" aria-hidden="true"></i>...
-<!-- <i class="fal fa-grin-tongue-squint"></i>... -->
 {% endif %}
+{% endcomment %} -->
 {% endblock %}
