@@ -156,4 +156,4 @@ LOGOUT_REDIRECT_URL = "home"
 # Simplified static file serving.
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-CSRF_TRUSTED_ORIGINS = ["*"]
+CSRF_TRUSTED_ORIGINS = ["https://social-media-udi2.onrender.com/",]
