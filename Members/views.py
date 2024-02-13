@@ -52,7 +52,6 @@ class ShowProfilePageView(DetailView):
         context["page_user"] = page_user
         return context
 
-
 class PasswordsChangeView(PasswordChangeView):
     form_class = PasswordChangingForm
     # form_class = PasswordChangeForm

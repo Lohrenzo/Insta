@@ -14,20 +14,16 @@ from pathlib import Path
 import os
 
 from decouple import config
-import dj_database_url
+# import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Update database configuration from $DATABASE_URL.
-# DATABASE_URL = "postgres://postgres.pnoybkssgznmytcbkzkb:instadbPassw@aws-0-eu-west-2.pooler.supabase.com:5432/postgres"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
-# SECRET_KEY = "django-insecure-(v^+aq7nh166a-g%nrp9s)-=@&v5^+=l(_-%@zq(qd^k7(g-jo"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = config("DEBUG", default=False, cast=bool)
@@ -36,9 +32,6 @@ DEBUG = os.environ.get("DEBUG")
 
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ["*"]
-# RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-# if RENDER_EXTERNAL_HOSTNAME:
-#     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Login Url added if not @login_required will be giving error
 LOGIN_URL = "/login"
@@ -75,15 +68,15 @@ ROOT_URLCONF = "Facecard.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "Templates")],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'Templates'],  # Make sure this path is correct
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -94,16 +87,6 @@ WSGI_APPLICATION = "Facecard.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-# if not DEBUG:
-#     DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))}
-# else:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': 'db.sqlite3',
-#         }
-#     }
 
 DATABASES = {
     # "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1000),
