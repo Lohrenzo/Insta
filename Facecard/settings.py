@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 
 from decouple import config
+
 # import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,10 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
+# SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = config("DEBUG", default=False, cast=bool)
-# DEBUG = False
 DEBUG = os.environ.get("DEBUG")
 
 # ALLOWED_HOSTS = []
@@ -68,15 +69,15 @@ ROOT_URLCONF = "Facecard.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'Templates'],  # Make sure this path is correct
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "Templates"],  # Make sure this path is correct
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
@@ -93,7 +94,6 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
-
         # "ENGINE": config("DB_ENGINE"),
         # "HOST": config("DB_HOST"),
         # "NAME": config("DB_NAME"),
@@ -138,7 +138,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles', "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles", "static")
 STATIC_URL = "static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "Static")]
 
@@ -156,4 +156,6 @@ LOGOUT_REDIRECT_URL = "home"
 # Simplified static file serving.
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-CSRF_TRUSTED_ORIGINS = ["https://social-media-udi2.onrender.com/",]
+CSRF_TRUSTED_ORIGINS = [
+    "https://social-media-udi2.onrender.com/",
+]

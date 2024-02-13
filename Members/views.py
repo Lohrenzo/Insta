@@ -98,6 +98,11 @@ def user_login(request):
         return render(request, "login.html")
 
 
+def user_logout(request):
+    logout(request)
+    return redirect("home")
+
+
 class UserRegisterView(generic.CreateView):
     form_class = SignUpForm
     template_name = "register.html"

@@ -13,6 +13,7 @@ from . import views
 
 urlpatterns = [
     path("login/", views.user_login, name="login"),
+    path("logout/", views.user_logout, name="logout"),
     path("sign-up/", UserRegisterView.as_view(), name="signup"),
     path("edit-profile/", UserEditView.as_view(), name="edit-profile"),
     # path('password/', auth_views.PasswordChangeView.as_view(template_name = 'Registration/change-password.html')),
