@@ -12,26 +12,33 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+
 from decouple import config
-# import dj_database_url
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Update database configuration from $DATABASE_URL.
+DATABASE_URL = "postgres://postgres.pnoybkssgznmytcbkzkb:instadbPassw@aws-0-eu-west-2.pooler.supabase.com:5432/postgres"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = config("SECRET_KEY")
-SECRET_KEY = "django-insecure-(v^+aq7nh166a-g%nrp9s)-=@&v5^+=l(_-%@zq(qd^k7(g-jo"
+SECRET_KEY = os.environ.get("SECRET_KEY")
+# SECRET_KEY = "django-insecure-(v^+aq7nh166a-g%nrp9s)-=@&v5^+=l(_-%@zq(qd^k7(g-jo"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = config("DEBUG", default=False, cast=bool)
-DEBUG = True
+# DEBUG = True
+DEBUG = 'RENDER' not in os.environ
 
-# ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ["*"]
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Login Url added if not @login_required will be giving error
 LOGIN_URL = "/login"
@@ -89,17 +96,17 @@ WSGI_APPLICATION = "Facecard.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    # "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-        # 'ENGINE': config('DB_ENGINE'),
-        # 'HOST': config('DB_HOST'),
-        # 'NAME': config('DB_NAME'),
-        # 'USER': config('DB_USER'),
-        # 'PASSWORD': config('DB_PASSWORD'),
-        # 'PORT': config('DB_PORT'),
-    }
+    "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1000),
+    # "default": {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": BASE_DIR / "db.sqlite3",
+    #     # "ENGINE": config("DB_ENGINE"),
+    #     # "HOST": config("DB_HOST"),
+    #     # "NAME": config("DB_NAME"),
+    #     # "USER": config("DB_USER"),
+    #     # "PASSWORD": config("DB_PASSWORD"),
+    #     # "PORT": config("DB_PORT"),
+    # }
 }
 
 
@@ -137,6 +144,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+if not DEBUG:
+    # Tell Django to copy statics to the `staticfiles` directory
+    # in your application directory on Render.
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles', "static")
+
 STATIC_URL = "static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "Static")]
 
@@ -150,3 +162,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
+
+# Simplified static file serving.
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
