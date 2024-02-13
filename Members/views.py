@@ -25,7 +25,7 @@ def add_favourite(request, id):
 class CreateProfilePageView(CreateView):
     model = Profile
     form_class = ProfilePageForm
-    template_name = 'Registration/create-profile-page.html'
+    template_name = 'create-profile-page.html'
     # fields = '__all__'
 
     def form_valid(self, form):
@@ -34,14 +34,14 @@ class CreateProfilePageView(CreateView):
 
 class EditProfilePageView(generic.UpdateView):
     model = Profile
-    template_name = 'Registration/edit-profile-page.html'
+    template_name = 'edit-profile-page.html'
     # success_url = reverse_lazy('user-profile')
     success_url = reverse_lazy('home')
     fields = ['bio', 'profile_pic', 'website_url', 'facebook_url', 'twitter_url', 'instagram_url', 'linkedin_url']
 
 class ShowProfilePageView(DetailView):
     model = Profile 
-    template_name = 'Registration/user-profile.html'
+    template_name = 'user-profile.html'
 
     def get_context_data(self, *args, **kwargs):
         # users = Profile.objects.all()
@@ -58,16 +58,16 @@ class PasswordsChangeView(PasswordChangeView):
     success_url = reverse_lazy('password-success')
 
 def password_success(request):
-    return render(request, 'Registration/password-success.html', {})
+    return render(request, 'password-success.html', {})
 
 class UserRegisterView(generic.CreateView):
     form_class = SignUpForm
-    template_name = 'Registration/register.html'
+    template_name = 'register.html'
     success_url = reverse_lazy('login')
 
 class UserEditView(generic.UpdateView):
     form_class = EditProfileForm
-    template_name = 'Registration/edit_profile.html'
+    template_name = 'edit_profile.html'
     success_url = reverse_lazy('home')
 
     def get_object(self):
