@@ -1,1 +1,1 @@
-web: gunicorn Insta.wsgi --log-file -
+web: gunicorn Facecard.wsgi --log-file -
